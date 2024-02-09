@@ -2,32 +2,96 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+@layer base {
+    body {
+        @apply bg-[#eef5fa];
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+    h1 {
+        @apply text-2xl font-normal text-black;
+    }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    h2 {
+        @apply text-base font-semibold text-gray-950;
+    }
+
+    h3 {
+        @apply text-lg font-medium;
+    }
+
+    hr {
+        @apply border-t border-[#tuColorDeBorde];
+    }
+
+    .span_subtitle {
+        @apply text-indigo-500 font-medium;
+    }
+
+    p {
+        @apply text-slate-600 whitespace-pre-line;
+    }
+
+    a {
+        @apply text-inherit no-underline;
+    }
+
+    .pointer {
+        @apply cursor-pointer;
+    }
+
+    form {
+        @apply flex flex-wrap gap-8;
+    }
+
+    fieldset {
+        @apply flex flex-col bg-[#f3f4f6] border-none rounded-lg p-2 gap-1 h-20;
+    }
+
+    label {
+        @apply text-sm font-extrabold text-purple-700 text-left;
+    }
+
+    span {
+        @apply text-sm font-normal text-slate-600 text-left;
+    }
+
+    input {
+      @apply text-base text-[#464d58] rounded-lg bg-white p-2 w-full;
+    }
+    select {
+        @apply text-base text-[#464d58] rounded-lg bg-white p-2 w-full;
+    }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .radio:checked {
+        background-color: theme('colors.purple.700');
+        border-color: theme('colors.purple.700');
+    }
+}
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 border-0 rounded text-white font-bold;
+    }
+
+    .btn-primary {
+        @apply bg-purple-700;
+    }
+
+    .btn-secondary {
+        @apply bg-[#1bc1ac];
+    }
+
+    .btn-danger {
+        @apply bg-red-500 hover:bg-red-700;
+    }
+
+    .content-radio {
+        @apply flex gap-1;
+    }
+
+    .content-checkbox {
+        @apply bg-transparent;
+    }
 }
