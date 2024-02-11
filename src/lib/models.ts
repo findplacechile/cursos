@@ -81,3 +81,11 @@ export const UserRoleSchema = z.object({
   moduleId: Int,
 });
 
+/**
+ ** LoginUser
+ **/
+ export const LoginUserSchema = z.object({
+  email: String,
+  password: String.min(3),
+});
+

@@ -69,6 +69,7 @@ const objectivesData = [
 const clasesData = [
   {
     name: "Cómo registrar un dominio",
+    url: "https://www.youtube.com/watch?v=90RLzVUuXe4&list=RD90RLzVUuXe4&start_radio=1"
   },
 ];
 

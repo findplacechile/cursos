@@ -77,6 +77,7 @@ model Module {
 model Clase {
   id               Int                @id @default(autoincrement())
   name             String
+  url              String
   modulesClases          ModulesClases[]
   clasesCategories ClasesCategories[]
 

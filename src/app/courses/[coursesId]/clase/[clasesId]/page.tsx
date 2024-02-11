@@ -16,13 +16,15 @@ export default function Clase({ params: { clasesId } }: { params: { clasesId: st
       ) : (
         <div className="p-2 md:p-8">
           <main className="grid grid-cols-1 gap-3">
-            <Image
-              className="clip-custom h-72 w-full rounded-lg object-cover"
-              width={100}
-              height={100}
-              src={Avatar}
-              alt="Clase Image"
-            />
+          <iframe
+            width="560"
+            height="315"
+            src={clase.data?.url}
+            title={clase.data?.name}
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
             <h1>{clase.data?.name}</h1>
             <h2>Lo que aprenderás</h2>
             
