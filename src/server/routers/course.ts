@@ -59,7 +59,15 @@ export const courseRouter = router({
             },
             coursesModules: {
               include: {
-                modules: true,
+                modules: {
+                  include: {
+                    modulesClases: {
+                      include: {
+                        clases: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
