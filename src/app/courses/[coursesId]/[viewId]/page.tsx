@@ -15,12 +15,9 @@ export default function ViewCourse() {
   const searchParams = useSearchParams();
   const courseId = searchParams.get("couseId");
   const lessonId = searchParams.get("lessonId");
-  console.log("🚀 ~ ViewCourse ~ lessonId:", lessonId);
-  console.log("🚀 ~ ViewCourse ~ viewId:", courseId);
   const selectedCourse = trpc.course.findById.useQuery({
     id: parseInt(courseId as string),
   });
-  console.log("🚀 ~ ViewCourse ~ selectedCourse:", selectedCourse);
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_400px] p-10">
