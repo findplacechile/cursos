@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TrpcProvider from "./_trpc/TrpcProvider";
 import AuthProvider from "./_context/AuthProvider";
+import Navbar from "./_components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
+        <Navbar />
           <TrpcProvider>{children}</TrpcProvider>
         </AuthProvider>
       </body>
