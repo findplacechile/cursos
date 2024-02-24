@@ -25,13 +25,37 @@ const userData = [
   },
 ];
 
+// Category
+const categoriesData = [
+  {
+    name: "Desarrollo web",
+  },
+  {
+    name: "Emprendimiento",
+  },
+  {
+    name: "Matemáticas",
+  },
+  {
+    name: "Inglés",
+  },
+];
+
+// Course
 const coursesData = [
   {
     name: "Cómo crear un onePage",
-    description:
-      "Un curso para crear un sitio web de una sola página, se recomienda para sitios web que no tienen mucha información o contenido que mostrar, se integran llamadas a las acción como formularios de contacto, botones de WhatsApp, redes sociales, etc.",
+    description: "Un curso para crear un sitio web de una sola página, se recomienda para sitios web que no tienen mucha información o contenido que mostrar, se integran llamadas a las acción como formularios de contacto, botones de WhatsApp, redes sociales, etc.",
+    requirements: [
+      "Laptop, Notebook u ordenador de escritorio",
+      "Internet",
+    ],
+    categoryId: 1,
+    feature_image: "url_de_la_imagen",
   },
 ];
+
+// Module
 const modulesData = [
   {
     name: "Estructura general",
@@ -39,7 +63,21 @@ const modulesData = [
   {
     name: "El dominio",
   },
+  {
+    name: "El hosting",
+  },
 ];
+
+// Clase
+const clasesData = [
+  {
+    name: "Cómo registrar un dominio",
+    url: "https://player.vimeo.com/video/454271149?h=b46bc61641",
+    description: "Descripción de la clase",
+  },
+];
+
+// Objetive
 const objectivesData = [
   {
     name: "Registrar un dominio",
@@ -66,43 +104,115 @@ const objectivesData = [
     name: "Publicar la Web",
   },
 ];
-const clasesData = [
+
+// CourseModule
+const coursesModulesData = [
   {
-    name: "Cómo registrar un dominio",
-    url: "https://www.youtube.com/watch?v=90RLzVUuXe4&list=RD90RLzVUuXe4&start_radio=1"
+    courseId: 1,
+    moduleId: 1,
+  },
+  {
+    courseId: 1,
+    moduleId: 2,
+  },
+  {
+    courseId: 1,
+    moduleId: 3,
+  },
+];
+
+// ModuleClase
+const modulesClasesData = [
+  {
+    moduleId: 2,
+    claseId: 1,
+  },
+];
+
+// CourseObjective
+const coursesObjectivesData = [
+  {
+    courseId: 1,
+    objectiveId: 1,
+  },
+  {
+    courseId: 1,
+    objectiveId: 2,
+  },
+  {
+    courseId: 1,
+    objectiveId: 3,
+  },
+  {
+    courseId: 1,
+    objectiveId: 4,
+  },
+  {
+    courseId: 1,
+    objectiveId: 5,
+  },
+  {
+    courseId: 1,
+    objectiveId: 6,
+  },
+  {
+    courseId: 1,
+    objectiveId: 7,
+  },
+  {
+    courseId: 1,
+    objectiveId: 8,
   },
 ];
 
 async function main() {
-  // ========================================
-  // Code for PostgreSQL
-  // ----------------------------------------
-  // UserRole
-  // ----------------------------------------
-   await prisma.userRole.deleteMany();
-   await prisma.userRole.createMany({ data: userRoleData });
-   await prisma.$executeRaw`ALTER SEQUENCE "UserRole_id_seq" RESTART WITH 1`;
-  // ----------------------------------------
-  // User
-  // ----------------------------------------
-   await prisma.user.deleteMany();
-   await prisma.user.createMany({ data: userData });
-     // Courses
+  // Crear los roles de usuario
+  await prisma.userRole.deleteMany();
+  await prisma.userRole.createMany({ data: userRoleData });
+  await prisma.$executeRaw`ALTER SEQUENCE "UserRole_id_seq" RESTART WITH 1`;
+
+  // Crear los usuarios
+  await prisma.user.deleteMany();
+  await prisma.user.createMany({ data: userData });
+
+   // Crear las categorias
+   await prisma.categorie.deleteMany();
+   await prisma.categorie.createMany({ data: categoriesData });
+   await prisma.$executeRaw`ALTER SEQUENCE categories_id_seq RESTART WITH 1`;
+
+  // Crear los cursos
   await prisma.course.deleteMany();
   await prisma.course.createMany({ data: coursesData });
-  await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1`;
-    // Modules
-    await prisma.module.deleteMany();
-    await prisma.module.createMany({ data: modulesData });
-    await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1`;
-  // Objectives
+  //await prisma.$executeRaw`ALTER SEQUENCE courses_id_seq RESTART WITH 1`;
+
+  // Crear los módulos
+  await prisma.module.deleteMany();
+  await prisma.module.createMany({ data: modulesData });
+  
+  //await prisma.$executeRaw`ALTER SEQUENCE modules_id_seq RESTART WITH 1`;
+
+  // Crear las clases
+  await prisma.clase.deleteMany();
+  await prisma.clase.createMany({ data: clasesData });
+  await prisma.$executeRaw`ALTER SEQUENCE clases_id_seq RESTART WITH 1`;
+
+  // Crear los objetivos
   await prisma.objective.deleteMany();
   await prisma.objective.createMany({ data: objectivesData });
   await prisma.$executeRaw`ALTER SEQUENCE objectives_id_seq RESTART WITH 1`;
-    // Clases
-    await prisma.clase.deleteMany();
-    await prisma.clase.createMany({ data: clasesData });
-    await prisma.$executeRaw`ALTER SEQUENCE clases_id_seq RESTART WITH 1`;
+
+  // Ahora que los cursos y módulos existen, puedes crear los cursosModules
+  await prisma.coursesModules.deleteMany();
+  await prisma.coursesModules.createMany({ data: coursesModulesData });
+
+  // Crear las relaciones entre módulos y clases
+  await prisma.modulesClases.deleteMany();
+  await prisma.modulesClases.createMany({ data: modulesClasesData });
+
+  // Crear las relaciones entre cursos y objetivos
+  await prisma.coursesObjectives.deleteMany();
+  await prisma.coursesObjectives.createMany({ data: coursesObjectivesData });
+
   // ========================================
   // Code for MySQL
   // ----------------------------------------

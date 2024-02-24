@@ -16,8 +16,6 @@ import {
 } from "./Icons";
 import useStore from "../_stores/useStore";
 import { useAsideNavStore } from "../_stores/useAsideNavStore";
-import { TbWorldWww } from "react-icons/tb";
-import { FaPlaneDeparture } from "react-icons/fa";
 
 interface Menu {
   title: string;
@@ -37,25 +35,52 @@ interface SubMenuItem {
 
 const Menus: Menu[] = [
   {
-    title: "Desarrollo Web",
-    src: <TbWorldWww />,
+    title: "Escritorio",
+    src: <Gauge />,
     to: "/dashboard",
     role: ["STUDENT", "PROFESSOR", "ADMIN"],
   },
   {
-    title: "Emprendimiento",
-    src: <FaPlaneDeparture />,
+    title: "Mis Cursos",
+    src: <Courses />,
     to: "/dashboard/my-courses",
+    role: ["STUDENT", "PROFESSOR", "ADMIN"],
+  },
+  {
+    title: "Estudiantes",
+    src: <User />,
+    role: ["ADMIN", "PROFESSOR"],
+  },
+  {
+    title: "Mi Perfil",
+    src: <FolderUser />,
+    gap: true,
+    role: ["STUDENT", "PROFESSOR", "ADMIN"],
+  },
+  {
+    title: "Facturación",
+    src: <Currency />,
+    to: "/dashboard/invoice",
     role: ["STUDENT", "PROFESSOR", "ADMIN"],
   },
 ];
 
-export const AsideNav = () => {
+export const AdminNav = () => {
   const asideNavHidden = useStore(useAsideNavStore, (state) => state.hidden);
 
   return (
     <aside
     >
+      <figure className="flex w-full items-center justify-center">
+        <Image
+          className="text-white"
+          height={100}
+          width={100}
+          src={Logo}
+          alt="Find Place logo"
+          priority
+        />
+      </figure>
       <div className="flex flex-col items-center gap-2 p-3 text-base-300">
         <ul className="pt-5">
           {Menus.map((Menu, index) => (

@@ -2,74 +2,84 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? @db.Text
-    session_state     String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    password      String?
-    emailVerified DateTime?
-    image         String?
+  id            String    @id @default(cuid())
+  name          String?
+  lastName      String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
 
-    roleId Int?
-    role   UserRole? @relation(fields: [roleId], references: [id])
+  roleId Int?
+  role   UserRole? @relation(fields: [roleId], references: [id])
 
-    accounts Account[]
-    sessions Session[]
+  accounts Account[]
+  sessions Session[]
+  Course   Course[]
+  Purchase Purchase[]
 
-    @@map("Users")
+  @@map("Users")
 }
 
 model Course {
-  id      Int              @id @default(autoincrement())
-  name    String
-  description   String?
-  requirements String?
-  coursesModules CoursesModules[]
+  id                Int                 @id @default(autoincrement())
+  name              String
+  categoryId        Int
+  description       String?
+  requirements      String[]
+  teacherId         String?
+  feature_image     String
+  teacher           User?               @relation(fields: [teacherId], references: [id])
+  coursesModules    CoursesModules[]
   coursesObjectives CoursesObjectives[]
+  Purchase          Purchase[]
+  categories        Categorie           @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@map("courses")
 }
 
 model Module {
-  id      Int              @id @default(autoincrement())
-  name    String
+  id             Int              @id @default(autoincrement())
+  name           String
   coursesModules CoursesModules[]
   modulesClases  ModulesClases[]
+  Purchase       Purchase[]
 
   @@map("modules")
 }
@@ -77,9 +87,11 @@ model Module {
 model Clase {
   id               Int                @id @default(autoincrement())
   name             String
+  description      String
   url              String
-  modulesClases          ModulesClases[]
+  modulesClases    ModulesClases[]
   clasesCategories ClasesCategories[]
+  Purchase         Purchase[]
 
   @@map("clases")
 }
@@ -88,30 +100,31 @@ model Categorie {
   id               Int                @id @default(autoincrement())
   name             String
   clasesCategories ClasesCategories[]
+  Course           Course[]
 
   @@map("categories")
 }
 
 model Objective {
-  id               Int                @id @default(autoincrement())
-  name             String
+  id                Int                 @id @default(autoincrement())
+  name              String
   coursesObjectives CoursesObjectives[]
 
   @@map("objectives")
 }
 
 model CoursesObjectives {
-  id       Int     @id @default(autoincrement())
-  courseId Int
+  id          Int       @id @default(autoincrement())
+  courseId    Int
   objectiveId Int
-  courses  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courses     Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   objectives  Objective @relation(fields: [objectiveId], references: [id], onDelete: Cascade)
 
   @@map("courses_objectives")
 }
 
 model CoursesModules {
-  id       Int     @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   courseId Int
   moduleId Int
   courses  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -121,7 +134,7 @@ model CoursesModules {
 }
 
 model ModulesClases {
-  id       Int     @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   moduleId Int
   claseId  Int
   modules  Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
@@ -131,7 +144,7 @@ model ModulesClases {
 }
 
 model ClasesCategories {
-  id         Int        @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   claseId    Int
   categoryId Int
   clases     Clase     @relation(fields: [claseId], references: [id], onDelete: Cascade)
@@ -140,17 +153,36 @@ model ClasesCategories {
   @@map("clases_categories")
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model Purchase {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  classId   Int?
+  moduleId  Int?
+  courseId  Int?
+  createdAt DateTime @default(now())
+  price     Float
+  status    String   @default("pending")
+  // Puedes agregar más campos según tus necesidades, como información de pago, número de transacción, etc.
 
-    @@unique([identifier, token])
+  user            User    @relation(fields: [userId], references: [id])
+  purchasedClass  Clase?  @relation(fields: [classId], references: [id])
+  purchasedModule Module? @relation(fields: [moduleId], references: [id])
+  purchasedCourse Course? @relation(fields: [courseId], references: [id])
+
+  @@map("purchase")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model UserRole {
-    id   Int    @id @default(autoincrement())
-    name String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
-    user User[]
+  user User[]
 }

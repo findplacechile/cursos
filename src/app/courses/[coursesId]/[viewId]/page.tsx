@@ -18,6 +18,8 @@ export default function ViewCourse() {
   const searchParams = useSearchParams();
   const courseId = searchParams.get("couseId");
   const lessonId = searchParams.get("lessonId");
+  const lessonName = searchParams.get("lessonName");
+  const lessonDescription = searchParams.get("lessonDescription");
   const selectedCourse = trpc.course.findById.useQuery({
     id: parseInt(courseId as string),
   });
@@ -27,12 +29,12 @@ export default function ViewCourse() {
       prevModuleId === moduleId ? null : moduleId
     );
   };
-  console.log(lessonId)
+  console.log(lessonId);
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_400px] p-10 md:p-0">
       <div className="grid gap-4 md:p-10">
-        <div className="rounded-lg border shadow-video overflow-hidden">
+        <div className="rounded-lg shadow-video overflow-hidden">
           <div className="aspect-[16/9]">
             {/* {lessonId && (
               <iframe
@@ -44,19 +46,20 @@ export default function ViewCourse() {
               ></iframe>
             )} */}
             {lessonId && (
-  <>
-    <iframe
-      className="w-full h-full"
-      src={`https://www.youtube.com/embed/${lessonId}`}
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-    <div className="text-center mt-4">
-      <h2 className="text-xl font-semibold">{lessonId}</h2>
-    </div>
-  </>
-)}
-
+              <>
+                <iframe
+                  width="760"
+                  height="515"
+                  src={lessonId}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+                <div>{lessonId}</div>
+                <div className="text-center mt-4">
+                  <h2 className="text-xl font-semibold">{lessonName}</h2>
+                  <p className="text-black">{lessonDescription}</p>
+                </div>
+              </>
+            )}
 
             {/* {lessonId && lessonId === "1" ? (
               <Image
@@ -140,7 +143,9 @@ export default function ViewCourse() {
       </div>
       <div className="grid items-start bg-slate-50 text-sm h-screen sticky top-0 z-10">
         <div className="space-y-0">
-          <h3 className="font-semibold bg-white p-4 border-b">Contenido del curso</h3>
+          <h3 className="font-semibold bg-white p-4 border-b">
+            Contenido del curso
+          </h3>
           {/* <ul className="list-disc list-inside">
             <li>Expert instruction</li>
             <li>Real-world examples</li>
@@ -150,26 +155,34 @@ export default function ViewCourse() {
           <div className="grid text-sm">
             {selectedCourse.data?.coursesModules.map((module) => (
               <div className="flex items-center" key={module.id}>
-                  <details
+                <details
                   className="w-full"
                   open={openModule === module.id}
                   onToggle={() => toggleModule(module.id)}
                 >
                   <summary className="cursor-pointer flex justify-between items-center border-b p-4 bg-white">
-                    <span className="font-semibold text-black">{module.modules.name}</span>
+                    <span className="font-semibold text-black">
+                      {module.modules.name}
+                    </span>
                     {openModule === module.id ? (
                       <MdKeyboardArrowUp className="w-5 h-5 ml-auto" />
                     ) : (
                       <MdKeyboardArrowDown className="w-5 h-5 ml-auto" />
                     )}
                   </summary>
-                  <ul className="p-4 list-none">
+                  <ul>
                     {module.modules.modulesClases.map((clase) => (
                       <li key={clase.id}>
                         <Link
-                          href={`${pathname}?couseId=${courseId}&lessonId=${clase.clases.url}`}
+                          className="rounded-none w-full"
+                          href={`${pathname}?couseId=${courseId}&lessonId=${
+                            clase.clases.url
+                          }&lessonName=${encodeURIComponent(
+                            clase.clases.name
+                          )}&lessonDescription=${encodeURIComponent(
+                            clase.clases.description
+                          )}`}
                         >
-                          
                           {clase.clases.name}
                         </Link>
                       </li>

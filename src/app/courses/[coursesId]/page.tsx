@@ -4,6 +4,14 @@ import Image from "next/image";
 import Avatar from "@/app/_assets/images/avatar.jpg";
 import Link from "next/link";
 import { trpc } from "@/app/_trpc/client";
+import { FaCheck, FaFile, FaGraduationCap, FaUserGraduate } from "react-icons/fa6";
+import { FaChalkboardTeacher, FaPhotoVideo, FaRegStar, FaStar } from "react-icons/fa";
+import { GrResources } from "react-icons/gr";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Navbar from "@/app/_components/Navbar";
+import Footer from "@/app/_components/Footer";
 
 export default function Course({
   params: { coursesId },
@@ -13,152 +21,196 @@ export default function Course({
   const selectedCourse = trpc.course.findById.useQuery({
     id: parseInt(coursesId),
   });
+  const [openModule, setOpenModule] = useState<number | null>(null);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("couseId");
+
+  const toggleModule = (moduleId: number) => {
+    setOpenModule((prevModuleId) =>
+      prevModuleId === moduleId ? null : moduleId
+    );
+  };
+
+  console.log(selectedCourse);
 
   return (
-    <div className="w-full">
-      <div className="bg-gray-100 border-b border-gray-200 dark:bg-gray-900 dark:border-gray-800">
-        <div className="container px-4 md:px-6">
-          <nav className="flex items-center justify-between h-14 md:h-20">
-            <a
-              className="flex items-center space-x-2 text-lg font-bold"
-              href="#"
-            >
-              <span className="flex items-center space-x-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="w-5 h-5"
-                >
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                </svg>
-                <span className="sr-only">Shadcn</span>
+    <>
+    <Navbar />
+    <div className="grid p-4 gap-4 lg:p-8 lg:grid-cols-[1fr_400px]">
+      <main className="grid grid-cols-1 p-8 gap-8 bg-white rounded-md">
+        <section className="grid grid-cols-1 gap-2">
+          <h1>{selectedCourse.data?.name}</h1>
+          <div className="flex items-center gap-8 p-2 rounded bg-slate-100">
+            <p className="flex items-center gap-2">
+            <FaChalkboardTeacher />
+              Creado por
+              <span>
+                {selectedCourse.data?.teacher?.name}{" "}
+                {selectedCourse.data?.teacher?.lastName}
               </span>
-            </a>
-            <div className="hidden md:flex md:space-x-4">
-              <a
-                className="flex items-center h-14 px-4 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                href="#"
-              >
-                Web Development
-              </a>
-              <a
-                className="flex items-center h-14 px-4 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                href="#"
-              >
-                Design
-              </a>
-              <a
-                className="flex items-center h-14 px-4 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800"
-                href="#"
-              >
-                Marketing
-              </a>
-            </div>
-            <div className="flex md:hidden">
-              <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  className="w-4 h-4"
-                >
-                  <line x1="4" x2="20" y1="12" y2="12"></line>
-                  <line x1="4" x2="20" y1="6" y2="6"></line>
-                  <line x1="4" x2="20" y1="18" y2="18"></line>
-                </svg>
-                <span className="sr-only">Toggle Menu</span>
-              </button>
-            </div>
-          </nav>
-        </div>
-      </div>
-      <div className="container px-4 py-8 space-y-8 md:py-12 md:space-y-12 lg:space-y-16 xl:space-y-20">
-        <div className="grid gap-6 lg:grid-cols-2 xl:gap-12">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-              {selectedCourse.data?.name}
-            </h1>
-            <p className="text-base leading-loose text-gray-500 md:text-xl dark:text-gray-400">
-              {selectedCourse.data?.description}
+            </p>
+            <p className="flex items-center gap-2">
+              <FaUserGraduate />
+              1.257{" "}
+              <span>
+                estudiantes
+              </span>
+            </p>
+            <p className="flex items-center gap-2 text-yellow-500">
+              4,9
+              <FaStar />
+              <span>
+                (276 valoraciones)
+              </span>
             </p>
           </div>
-          <div className="flex flex-col md:justify-end space-y-2 md:space-y-4">
-            <div className="flex items-center space-x-2 text-sm font-medium md:space-x-4 md:text-base">
-              <div className="flex items-center space-x-2">
-                <Image
-                  src={Avatar}
-                  width="40"
-                  height="40"
-                  className="rounded-full object-cover"
-                  alt="Instructor"
-                />
-                <span className="font-semibold">Wes Bos</span>
+        </section>
+        <div className="sticky top-0 z-10 bg-white pt-2 border-b-2">
+          <nav className="flex flex-row gap-2">
+            <a href="#description">
+              <FaFile /> Descripción
+            </a>
+            <a href="#objective">
+              <FaGraduationCap />
+              Lo que aprenderás
+            </a>
+            <a href="#requeriments">
+              <GrResources />
+              Requisitos
+            </a>
+            <a href="#lessons">
+              <FaPhotoVideo />
+              Contenido
+            </a>
+            <a href="#flow">
+              <FaPhotoVideo />
+              Flujo
+            </a>
+          </nav>
+        </div>
+        <Image
+          src={Avatar}
+          width="600"
+          height="300"
+          className="rounded-md"
+          alt="Instructor"
+        />
+        <section
+          id="description"
+          className="grid grid-cols-1 rounded-md p-2 gap-2"
+        >
+          <h2 className="flex flex-row items-center gap-2">
+            <FaFile />
+            Descripción
+          </h2>
+          <hr />
+          <p className="mt-8">{selectedCourse.data?.description}</p>
+        </section>
+        <section
+          id="objective"
+          className="grid grid-cols-1 rounded-md p-2 gap-2"
+        >
+          <h2 className="flex flex-row items-center gap-2">
+            <FaGraduationCap />
+            Lo que aprenderás
+          </h2>
+          <hr />
+          <ul className="mt-8">
+            {selectedCourse.data?.coursesObjectives.map((objective) => (
+              <li key={objective.id}>
+                <FaCheck />
+                {objective.objectives.name}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section
+          id="requeriments"
+          className="grid grid-cols-1 rounded-md p-2 gap-2"
+        >
+          <h2>Requisitos</h2>
+          <hr />
+          <ul className="mt-8">
+            {selectedCourse.data?.requirements.map((requirement, index) => (
+              <li key={index}>
+                <FaCheck /> {requirement}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section id="content" className="grid grid-cols-1 rounded-md p-2 gap-2">
+          <h2>Contenido del curso</h2>
+          <hr />
+          <div className="grid items-start text-sm mt-8">
+            <div className="space-y-0">
+              <div className="grid text-sm">
+                {selectedCourse.data?.coursesModules.map((module) => (
+                  <div className="flex items-center" key={module.id}>
+                    <details
+                      className="w-full"
+                      open={openModule === module.id}
+                      onToggle={() => toggleModule(module.id)}
+                    >
+                      <summary className="cursor-pointer flex justify-between items-center border-b p-4 bg-slate-50">
+                        <span className="font-semibold text-black">
+                          {module.modules.name}
+                        </span>
+                        {openModule === module.id ? (
+                          <MdKeyboardArrowUp className="w-5 h-5 ml-auto" />
+                        ) : (
+                          <MdKeyboardArrowDown className="w-5 h-5 ml-auto" />
+                        )}
+                      </summary>
+                      <ul className="p-4 list-none">
+                        {module.modules.modulesClases.map((clase) => (
+                          <li key={clase.id}>
+                            <Link
+                              className="rounded-none w-full"
+                              href={`${pathname}?couseId=${courseId}&lessonId=${
+                                clase.clases.url
+                              }&lessonName=${encodeURIComponent(
+                                clase.clases.name
+                              )}&lessonDescription=${encodeURIComponent(
+                                clase.clases.description
+                              )}`}
+                            >
+                              {clase.clases.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  </div>
+                ))}
               </div>
-              <span className="text-gray-500 dark:text-gray-400">10h 42m</span>
-            </div>
-            <Link
-              href={`${coursesId}/view?couseId=${coursesId}`}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 max-w-[200px] md:justify-self-end"
-            >
-              Enroll in Course
-            </Link>
-          </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold">What you'll learn</h2>
-            <ul className="pl-4 space-y-2">
-              <li>Building components with utility classes</li>
-              <li>Responsive design with variants</li>
-              <li>Customizing your own design system</li>
-            </ul>
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold">Requirements</h2>
-            <ul className="pl-4 space-y-2">
-              <li>Basic knowledge of HTML and CSS</li>
-              <li>Code editor (VS Code recommended)</li>
-              <li>Desire to learn and experiment</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-gray-200 dark:border-gray-800">
-        <div className="container px-4 py-8 space-y-8 md:py-12 md:space-y-12 lg:space-y-16 xl:space-y-20">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold">What you'll learn</h2>
-              <ul className="pl-4 space-y-2">
-                <li>Building components with utility classes</li>
-                <li>Responsive design with variants</li>
-                <li>Customizing your own design system</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-lg font-semibold">Requirements</h2>
-              <ul className="pl-4 space-y-2">
-                <li>Basic knowledge of HTML and CSS</li>
-                <li>Code editor (VS Code recommended)</li>
-                <li>Desire to learn and experiment</li>
-              </ul>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+        <section
+          id="flow"
+          className="grid grid-cols-1 rounded-md p-2 gap-2"
+        >
+          <h2 className="flex flex-row items-center gap-2">
+            <FaFile />
+            Flujo de aprendizaje 
+          </h2>
+          <hr />
+          <p className="mt-8">Este curso está diseñado para que puedas inscribirte en todas las clases o solo en una, puedes ir aprendiendo desde el comienzo o solo ir a una clase para aprender algo específico, si estás comenzando te recomendamos que comiences por el primer módulo y no te saltes ninguna clase.<br/> Algunas clases tienen relación con otros cursos, por lo que estarías aprendiendo muchas cosas al mismo tiempo</p>
+        </section>
+      </main>
+      <aside className="h-screen sticky top-0 z-10">
+        <section className="rounded-md p-4 lg:p-8">
+          <Link
+            href={`${coursesId}/view?couseId=${coursesId}`}
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 max-w-[200px] md:justify-self-end"
+          >
+            Comenzar
+          </Link>
+        </section>
+      </aside>
     </div>
+    <Footer />
+    </>
   );
 }

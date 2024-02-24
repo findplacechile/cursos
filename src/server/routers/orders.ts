@@ -4,16 +4,16 @@ import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const courseRouter = router({
+export const ordersRouter = router({
   // create: adminProcedure
   //   .input(
-  //     CourseSchema.omit({
+  //     ClasesSchema.omit({
   //       id: true,
   //     })
   //   )
   //   .mutation(async (opts) => {
   //     try {
-  //       const courseFound = await prisma.courses.findFirst({
+  //       const courseFound = await prisma.clases.findFirst({
   //         where: {
   //           name: opts.input.name,
   //         },
@@ -22,7 +22,7 @@ export const courseRouter = router({
   //       if (courseFound) {
   //         ThrowError(Error, "CONFLICT", "El curso ya existe");
   //       }
-  //       return await prisma.courses.create({
+  //       return await prisma.clases.create({
   //         data: opts.input,
   //       });
   //     } catch (error) {
@@ -31,7 +31,7 @@ export const courseRouter = router({
   //   }),
   readAll: publicProcedure.query(async () => {
     try {
-      return await prisma.course.findMany();
+      return await prisma.clase.findMany();
     } catch (error) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
@@ -47,30 +47,9 @@ export const courseRouter = router({
     )
     .query(async (opts) => {
       try {
-        return await prisma.course.findUnique({
+        return await prisma.clase.findUnique({
           where: {
             id: opts.input.id,
-          },
-          include: {
-            teacher: true,
-            coursesObjectives: {
-              include: {
-                objectives: true,
-              },
-            },
-            coursesModules: {
-              include: {
-                modules: {
-                  include: {
-                    modulesClases: {
-                      include: {
-                        clases: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
           },
         });
       } catch (error) {

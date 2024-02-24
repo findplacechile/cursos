@@ -15,6 +15,8 @@ const Decimal = z.custom<DecimalPackage>((val) => {
   }
 });
 
+export const RoleSchema = z.enum(["STUDENT", "PROFESSOR", "ADMIN"]);
+
 export const UserSchema = z.object({
   id: String,
   name: String.nullable(),
@@ -45,6 +47,8 @@ export const UserRoleSchema = z.object({
  export const CourseSchema = z.object({
   id: Int,
   name: String,
+  description: String,
+  teacherId: String,
 });
 
 /**
@@ -61,6 +65,7 @@ export const UserRoleSchema = z.object({
  export const ClaseSchema = z.object({
   id: Int,
   name: String,
+  description: String,
 });
 
 /**
