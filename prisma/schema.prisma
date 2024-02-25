@@ -62,9 +62,10 @@ model Course {
   name              String
   categoryId        Int
   description       String?
-  requirements      String[]
+  price             Float?
   teacherId         String?
   feature_image     String
+  requirements      String[]
   teacher           User?               @relation(fields: [teacherId], references: [id])
   coursesModules    CoursesModules[]
   coursesObjectives CoursesObjectives[]
@@ -77,6 +78,7 @@ model Course {
 model Module {
   id             Int              @id @default(autoincrement())
   name           String
+  price          Float?
   coursesModules CoursesModules[]
   modulesClases  ModulesClases[]
   Purchase       Purchase[]
@@ -88,6 +90,7 @@ model Clase {
   id               Int                @id @default(autoincrement())
   name             String
   description      String
+  price            Float?
   url              String
   modulesClases    ModulesClases[]
   clasesCategories ClasesCategories[]
@@ -160,7 +163,6 @@ model Purchase {
   moduleId  Int?
   courseId  Int?
   createdAt DateTime @default(now())
-  price     Float
   status    String   @default("pending")
   // Puedes agregar más campos según tus necesidades, como información de pago, número de transacción, etc.
 

@@ -2,35 +2,30 @@ import Image from "next/image";
 import Avatar from "@/app/_assets/images/avatar.jpg";
 import Link from "next/link";
 import { Course } from "@prisma/client";
+import { VscBook } from "react-icons/vsc";
 
 interface CourseCardProps {
   course: Course;
 }
 
 export const CourseCard = ({ course }: CourseCardProps) => {
-  const { name, description, requirements, id, feature_image, teacherId } = course;
+  const { name, description, requirements, id, feature_image, teacherId } =
+    course;
   return (
-    <div
-      className="rounded-lg border bg-card text-card-foreground shadow-sm"
-      data-v0-t="card"
-    >
-      <div className="aspect-w-16 aspect-h-9">
-        <Image
-          src={Avatar}
-          alt="Course thumbnail"
-          className="object-cover w-full h-full rounded-se-lg rounded-ss-lg"
-        />
+    <Link className="p-0 text-gray-900" href={`courses/${id}`}>
+      <div className="rounded-md border bg-white p-4 flex flex-col items-start gap-4">
+        <div>
+          <Image src={Avatar} alt="Course thumbnail" className="rounded-md" />
+        </div>
+        <h3>{name}</h3>
+        <div className="bg-[#1bc1ac] p-1 rounded-full">
+          <VscBook />
+        </div>
+        <p>$20.000</p>
+        <div className="w-full bg-gray-200 rounded-full">
+    <div className="bg-blue-500 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: "45%" }}>45%</div>
+  </div>
       </div>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold line-clamp-1">{name}</h3>
-      </div>
-      <div className="flex items-center p-6">
-        <Link className="inline-block w-full" href={`courses/${id}`}>
-          <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-500 text-white hover:bg-blue-500/90 h-10 px-4 py-2">
-            Inscribirse
-          </button>
-        </Link>
-      </div>
-    </div>
+    </Link>
   );
 };

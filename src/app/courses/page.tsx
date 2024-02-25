@@ -20,10 +20,10 @@ export default function Courses() {
     <Navbar />
     </div>
     <main className="flex w-screen">
-      <aside className="left-0 bg-white fixed top-18 h-full">
+      <aside className="left-0 bg-white fixed top-18 h-full w-1/5">
         <AsideNav />
       </aside>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-14 ml-48">
+      <section className="grid md:grid-cols-3 gap-6 p-14 w-4/5 ml-60">
         {courses.isLoading ? (
           <Loading />
         ) : (
@@ -35,7 +35,7 @@ export default function Courses() {
             </React.Fragment>
           ))
         )}
-      </div>
+      </section>
     </main>
     <Footer />
     </>
