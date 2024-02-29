@@ -2,7 +2,6 @@ import { options } from "../api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { UserList } from "../_components/UserList";
 
 export default async function Dashboard() {
   const session = await getServerSession(options);
@@ -15,7 +14,6 @@ export default async function Dashboard() {
       Welcome: {session?.user.name} - {" "}
       <Link href="/api/auth/signout?callbackUrl=/">Logout</Link>
       <br />
-      <UserList />
     </>
   );
 }
