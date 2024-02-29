@@ -2,16 +2,20 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
-import { FaPlay } from "react-icons/fa6";
+import { FaPlay, FaXmark } from "react-icons/fa6";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Avatar from "@/app/_assets/images/avatar.jpg";
 import Product from "@/app/_assets/images/product-preview.jpg";
 import { trpc } from "@/app/_trpc/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { IoExitOutline } from "react-icons/io5";
+import { VscBook } from "react-icons/vsc";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function ViewCourse() {
   const [openModule, setOpenModule] = useState<number | null>(null);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -29,172 +33,120 @@ export default function ViewCourse() {
       prevModuleId === moduleId ? null : moduleId
     );
   };
+
+  const toggleSidebar = () => {
+    setShowSidebar((prevState) => !prevState);
+  };
+
   console.log(lessonId);
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_400px] p-10 md:p-0">
-      <div className="grid gap-4 md:p-10">
-        <div className="rounded-lg shadow-video overflow-hidden">
-          <div className="aspect-[16/9]">
-            {/* {lessonId && (
-              <iframe
-                width="560"
-                height="315"
-                src={lessonId}
-                title={"Videos"}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              ></iframe>
-            )} */}
-            {lessonId && (
-              <>
+    <>
+      <div className="grid lg:grid-cols-[1fr_400px]">
+        <div className="grid gap-2 md:gap-0 md:p-8 items-start">
+          {lessonId && (
+            <>
+              <div className="aspect-video">
                 <iframe
-                  width="760"
-                  height="515"
+                  className="w-full h-full md:rounded-md"
                   src={lessonId}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
-                <div>{lessonId}</div>
-                <div className="text-center mt-4">
-                  <h2 className="text-xl font-semibold">{lessonName}</h2>
-                  <p className="text-black">{lessonDescription}</p>
+              </div>
+              <div className="grid text-start px-4 md:px-2">
+                <h2 className="text-2xl">{lessonName}</h2>
+                <p className="text-black">{lessonDescription}</p>
+              </div>
+            </>
+          )}
+        </div>
+        <div
+          className={`grid items-start bg-slate-50 text-sm lg:h-screen sticky top-0 z-10 ${
+            showSidebar ? "" : "hidden"
+          } lg:block`}
+        >
+          <div className="space-y-0">
+            <div className="flex bg-white p-4 border-b justify-between items-center">
+              <h3 className="font-semibold">{selectedCourse.data?.name}</h3>
+              <div className="hidden lg:flex items-center gap-1">
+                <IoExitOutline />
+                <h3 className="text-gray-600">Salir</h3>
+              </div>
+              <div className="flex lg:hidden items-center gap-1 bg-red-500 text-white p-2 rounded">
+                <FaXmark />
+              </div>
+            </div>
+            <div className="grid text-sm">
+              {selectedCourse.data?.coursesModules.map((module) => (
+                <div className="flex items-center" key={module.id}>
+                  <details
+                    className="w-full"
+                    open={openModule === module.id}
+                    onToggle={() => toggleModule(module.id)}
+                  >
+                    <summary className="cursor-pointer flex justify-between items-center border-b p-4 bg-white">
+                      <span className="font-semibold text-black">
+                        {module.modules.name}
+                      </span>
+                      {openModule === module.id ? (
+                        <MdKeyboardArrowUp className="w-5 h-5 ml-auto" />
+                      ) : (
+                        <MdKeyboardArrowDown className="w-5 h-5 ml-auto" />
+                      )}
+                    </summary>
+                    <ul>
+                      {module.modules.modulesLessons.map((lesson) => (
+                        <li key={lesson.id}>
+                          <Link
+                            className="rounded-none w-full"
+                            href={`${pathname}?couseId=${courseId}&lessonId=${
+                              lesson.lessons.url
+                            }&lessonName=${encodeURIComponent(
+                              lesson.lessons.name
+                            )}&lessonDescription=${encodeURIComponent(
+                              lesson.lessons.description
+                            )}`}
+                            onClick={toggleSidebar}
+                          >
+                            {lesson.lessons.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
                 </div>
-              </>
-            )}
-
-            {/* {lessonId && lessonId === "1" ? (
-              <Image
-                src={Avatar}
-                alt="Instructor"
-                className="object-cover w-full h-full rounded-md"
-              />
-            ) : (
-              <Image
-                src={Product}
-                alt="Instructor"
-                className="object-cover w-full h-full rounded-md"
-              />
-            )} */}
-          </div>
-        </div>
-        <div className="grid gap-2">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold">{selectedCourse.data?.name}</h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              {selectedCourse.data?.description}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <Image
-                src={Avatar}
-                alt="Instructor"
-                className="rounded-full"
-                height="40"
-                style={{
-                  aspectRatio: "40/40",
-                  objectFit: "cover",
-                }}
-                width="30"
-              />
-              <div className="space-y-0.5">
-                <h3 className="font-semibold">John Smith</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  10,000 students | 4.5 rating
-                </p>
-              </div>
-            </div>
-            <button className="sm">Message Instructor</button>
-          </div>
-        </div>
-        <div className="grid gap-4">
-          <div className="border-t pt-4">
-            <h2 className="font-semibold">Progress</h2>
-            <div className="grid gap-2">
-              <div className="flex items-center gap-2">
-                <span>1. Introduction to Data Science</span>
-                <progress
-                  className="flex-1 h-2 rounded-lg"
-                  max="100"
-                  value="50"
-                />
-                <span>50%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>2. Data Analysis with Pandas</span>
-                <progress
-                  className="flex-1 h-2 rounded-lg"
-                  max="100"
-                  value="0"
-                />
-                <span>0%</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>3. Machine Learning Fundamentals</span>
-                <progress
-                  className="flex-1 h-2 rounded-lg"
-                  max="100"
-                  value="0"
-                />
-                <span>0%</span>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      <div className="grid items-start bg-slate-50 text-sm h-screen sticky top-0 z-10">
-        <div className="space-y-0">
-          <h3 className="font-semibold bg-white p-4 border-b">
-            Contenido del curso
-          </h3>
-          {/* <ul className="list-disc list-inside">
-            <li>Expert instruction</li>
-            <li>Real-world examples</li>
-            <li>Knowledge checks</li>
-            <li>Quizzes</li>
-          </ul> */}
-          <div className="grid text-sm">
-            {selectedCourse.data?.coursesModules.map((module) => (
-              <div className="flex items-center" key={module.id}>
-                <details
-                  className="w-full"
-                  open={openModule === module.id}
-                  onToggle={() => toggleModule(module.id)}
-                >
-                  <summary className="cursor-pointer flex justify-between items-center border-b p-4 bg-white">
-                    <span className="font-semibold text-black">
-                      {module.modules.name}
-                    </span>
-                    {openModule === module.id ? (
-                      <MdKeyboardArrowUp className="w-5 h-5 ml-auto" />
-                    ) : (
-                      <MdKeyboardArrowDown className="w-5 h-5 ml-auto" />
-                    )}
-                  </summary>
-                  <ul>
-                    {module.modules.modulesClases.map((clase) => (
-                      <li key={clase.id}>
-                        <Link
-                          className="rounded-none w-full"
-                          href={`${pathname}?couseId=${courseId}&lessonId=${
-                            clase.clases.url
-                          }&lessonName=${encodeURIComponent(
-                            clase.clases.name
-                          )}&lessonDescription=${encodeURIComponent(
-                            clase.clases.description
-                          )}`}
-                        >
-                          {clase.clases.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* <button className="w-full lg:w-auto">Take Quiz</button> */}
+      <div className="grid grid-cols-4 bg-blue-950 lg:hidden z-50 fixed bottom-0 w-full">
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="btn-footer"
+        >
+          <IoExitOutline className="h-6 w-6" />
+          Salir
+        </button>
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="btn-footer"
+        >
+          <FaArrowLeft className="h-6 w-6" />
+          Anterior
+        </button>
+        <button
+          onClick={() => setShowSidebar(!showSidebar)}
+          className="btn-footer"
+        >
+          <FaArrowRight className="h-6 w-6" />
+          Siguiente
+        </button>
+        <button onClick={toggleSidebar} className="btn-footer">
+          <VscBook className="h-6 w-6" />
+          Contenido
+        </button>
       </div>
-    </div>
+    </>
   );
 }

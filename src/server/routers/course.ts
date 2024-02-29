@@ -62,9 +62,9 @@ export const courseRouter = router({
               include: {
                 modules: {
                   include: {
-                    modulesClases: {
+                    modulesLessons: {
                       include: {
-                        clases: true,
+                        lessons: true,
                       },
                     },
                   },
@@ -76,7 +76,7 @@ export const courseRouter = router({
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Error al obtener la clase",
+          message: "Error al obtener la lesson",
         });
       }
     }),

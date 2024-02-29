@@ -61,7 +61,7 @@ CREATE TABLE `modules` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `clases` (
+CREATE TABLE `lessons` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `url` VARCHAR(191) NOT NULL,
@@ -104,18 +104,18 @@ CREATE TABLE `courses_modules` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `modules_clases` (
+CREATE TABLE `modules_lessons` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `moduleId` INTEGER NOT NULL,
-    `claseId` INTEGER NOT NULL,
+    `lessonId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `clases_categories` (
+CREATE TABLE `lessons_categories` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `claseId` INTEGER NOT NULL,
+    `lessonId` INTEGER NOT NULL,
     `categoryId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -162,13 +162,13 @@ ALTER TABLE `courses_modules` ADD CONSTRAINT `courses_modules_courseId_fkey` FOR
 ALTER TABLE `courses_modules` ADD CONSTRAINT `courses_modules_moduleId_fkey` FOREIGN KEY (`moduleId`) REFERENCES `modules`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `modules_clases` ADD CONSTRAINT `modules_clases_moduleId_fkey` FOREIGN KEY (`moduleId`) REFERENCES `modules`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `modules_lessons` ADD CONSTRAINT `modules_lessons_moduleId_fkey` FOREIGN KEY (`moduleId`) REFERENCES `modules`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `modules_clases` ADD CONSTRAINT `modules_clases_claseId_fkey` FOREIGN KEY (`claseId`) REFERENCES `clases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `modules_lessons` ADD CONSTRAINT `modules_lessons_lessonId_fkey` FOREIGN KEY (`lessonId`) REFERENCES `lessons`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `clases_categories` ADD CONSTRAINT `clases_categories_claseId_fkey` FOREIGN KEY (`claseId`) REFERENCES `clases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `lessons_categories` ADD CONSTRAINT `lessons_categories_lessonId_fkey` FOREIGN KEY (`lessonId`) REFERENCES `lessons`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `clases_categories` ADD CONSTRAINT `clases_categories_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `lessons_categories` ADD CONSTRAINT `lessons_categories_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `categories`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

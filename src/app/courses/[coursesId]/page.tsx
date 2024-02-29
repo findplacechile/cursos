@@ -163,19 +163,19 @@ export default function Course({
                         )}
                       </summary>
                       <ul className="p-4 list-none">
-                        {module.modules.modulesClases.map((clase) => (
-                          <li key={clase.id}>
+                        {module.modules.modulesLessons.map((lesson) => (
+                          <li key={lesson.id}>
                             <Link
                               className="rounded-none w-full"
                               href={`${pathname}?couseId=${courseId}&lessonId=${
-                                clase.clases.url
+                                lesson.lessons.url
                               }&lessonName=${encodeURIComponent(
-                                clase.clases.name
+                                lesson.lessons.name
                               )}&lessonDescription=${encodeURIComponent(
-                                clase.clases.description
+                                lesson.lessons.description
                               )}`}
                             >
-                              {clase.clases.name}
+                              {lesson.lessons.name}
                             </Link>
                           </li>
                         ))}
@@ -196,7 +196,7 @@ export default function Course({
             Flujo de aprendizaje 
           </h2>
           <hr />
-          <p className="mt-8">Este curso está diseñado para que puedas inscribirte en todas las clases o solo en una, puedes ir aprendiendo desde el comienzo o solo ir a una clase para aprender algo específico, si estás comenzando te recomendamos que comiences por el primer módulo y no te saltes ninguna clase.<br/> Algunas clases tienen relación con otros cursos, por lo que estarías aprendiendo muchas cosas al mismo tiempo</p>
+          <p className="mt-8">Este curso está diseñado para que puedas inscribirte en todas las lessons o solo en una, puedes ir aprendiendo desde el comienzo o solo ir a una lesson para aprender algo específico, si estás comenzando te recomendamos que comiences por el primer módulo y no te saltes ninguna lesson.<br/> Algunas lessons tienen relación con otros cursos, por lo que estarías aprendiendo muchas cosas al mismo tiempo</p>
         </section>
       </main>
       <aside className="h-screen sticky top-0 z-10">

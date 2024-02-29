@@ -1,7 +1,7 @@
 import { categoryRouter } from "./routers/category";
-import { clasesRouter } from "./routers/clases";
+import { lessonsRouter } from "./routers/lessons";
 import { courseRouter } from "./routers/course";
-import { ordersRouter } from "./routers/orders";
+import { ordersRouter } from "./routers/pursache";
 import { userRouter } from "./routers/user";
 import { publicProcedure, router } from "./trpc";
 
@@ -9,7 +9,7 @@ export const appRouter = router({
   greeting: publicProcedure.query(() => "Hello from tRPC"),
   user: userRouter,
   course: courseRouter,
-  clase: clasesRouter,
+  lesson: lessonsRouter,
   order: ordersRouter,
   category: categoryRouter,
 });

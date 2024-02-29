@@ -74,7 +74,7 @@
         @apply text-base text-[#464d58] rounded-lg bg-white p-2 w-full;
     }
     button {
-        @apply px-4 py-2 border-0 rounded text-white bg-purple-700 font-bold;
+        @apply flex justify-center px-4 py-2 border-0 rounded text-white bg-purple-700 font-bold;
     }
 }
 
@@ -87,11 +87,15 @@
 
 @layer components {
     .btn-secondary {
-        @apply bg-[#1bc1ac];
+        @apply bg-[#1bc1ac] text-slate-700;
     }
 
     .btn-danger {
         @apply bg-red-500 hover:bg-red-700;
+    }
+
+    .btn-footer {
+        @apply flex-col bg-transparent items-center text-sm font-normal;
     }
 
     .content-radio {

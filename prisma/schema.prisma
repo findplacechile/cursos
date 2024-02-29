@@ -80,29 +80,29 @@ model Module {
   name           String
   price          Float?
   coursesModules CoursesModules[]
-  modulesClases  ModulesClases[]
+  modulesLessons  ModulesLessons[]
   Purchase       Purchase[]
 
   @@map("modules")
 }
 
-model Clase {
+model Lesson {
   id               Int                @id @default(autoincrement())
   name             String
   description      String
   price            Float?
   url              String
-  modulesClases    ModulesClases[]
-  clasesCategories ClasesCategories[]
+  modulesLessons    ModulesLessons[]
+  lessonsCategories LessonsCategories[]
   Purchase         Purchase[]
 
-  @@map("clases")
+  @@map("lessons")
 }
 
 model Categorie {
   id               Int                @id @default(autoincrement())
   name             String
-  clasesCategories ClasesCategories[]
+  lessonsCategories LessonsCategories[]
   Course           Course[]
 
   @@map("categories")
@@ -136,24 +136,24 @@ model CoursesModules {
   @@map("courses_modules")
 }
 
-model ModulesClases {
+model ModulesLessons {
   id       Int    @id @default(autoincrement())
   moduleId Int
-  claseId  Int
+  lessonId  Int
   modules  Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  clases   Clase  @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  lessons   Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  @@map("modules_clases")
+  @@map("modules_lessons")
 }
 
-model ClasesCategories {
+model LessonsCategories {
   id         Int       @id @default(autoincrement())
-  claseId    Int
+  lessonId    Int
   categoryId Int
-  clases     Clase     @relation(fields: [claseId], references: [id], onDelete: Cascade)
+  lessons     Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   categories Categorie @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@map("clases_categories")
+  @@map("lessons_categories")
 }
 
 model Purchase {
@@ -167,7 +167,7 @@ model Purchase {
   // Puedes agregar más campos según tus necesidades, como información de pago, número de transacción, etc.
 
   user            User    @relation(fields: [userId], references: [id])
-  purchasedClass  Clase?  @relation(fields: [classId], references: [id])
+  purchasedClass  Lesson?  @relation(fields: [classId], references: [id])
   purchasedModule Module? @relation(fields: [moduleId], references: [id])
   purchasedCourse Course? @relation(fields: [courseId], references: [id])
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ClaseSchema, CourseModulesSchema, CourseObjectivesSchema, CourseSchema, LoginUserSchema, ModuleSchema, ObjectiveSchema, RoleSchema, UserRoleSchema, UserSchema } from "./models";
+import { LessonSchema, CourseModulesSchema, CourseObjectivesSchema, CourseSchema, LoginUserSchema, ModuleSchema, ObjectiveSchema, RoleSchema, UserRoleSchema, UserSchema } from "./models";
 
 export type Role = z.infer<typeof RoleSchema>;
 export type User = z.infer<typeof UserSchema>;
@@ -33,10 +33,10 @@ export const defaultCourseObjectivesValues = {
 } as const;
 
 /**
- ** Clases
+ ** Lessons
  */
-export type Clase = z.infer<typeof ClaseSchema>;
-export const defaultClasesValues = {
+export type Lesson = z.infer<typeof LessonSchema>;
+export const defaultLessonsValues = {
   id: 0,
   name: "",
   description: "",

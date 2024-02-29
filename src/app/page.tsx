@@ -28,7 +28,7 @@ export default function Home() {
       </div>
       <section className="flex flex-col items-center mt-10 mb-5 text-center gap-4">
       <h1>Nuestra metodología</h1>
-      <p>Una clase podrías estar relacionada con muchos cursos, entonces con una clase podrías estar aprendiendo muchas cosas al mismo tiempo.</p>
+      <p>Una lesson podrías estar relacionada con muchos cursos, entonces con una lesson podrías estar aprendiendo muchas cosas al mismo tiempo.</p>
       </section>
       <section className="grid md:grid-cols-3 gap-8 w-5/6">
         <article className="flex flex-col items-center bg-white p-8 rounded shadow-lg gap-2">
@@ -50,7 +50,7 @@ export default function Home() {
           <FaPuzzlePiece className="w-16 h-16 text-red-500" />
           <h2>Aprende lo Necesario</h2>
           <p className="text-center">
-            Puedes inscribirte en un curso completo o solo en una clase, así aprenderás lo necesario y aprovecharás mejor tu tiempo y dinero.
+            Puedes inscribirte en un curso completo o solo en una lesson, así aprenderás lo necesario y aprovecharás mejor tu tiempo y dinero.
           </p>
         </article>
       </section>

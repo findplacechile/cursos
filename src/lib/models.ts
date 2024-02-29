@@ -60,9 +60,9 @@ export const UserRoleSchema = z.object({
 });
 
 /**
- ** Clases
+ ** Lessons
  */
- export const ClaseSchema = z.object({
+ export const LessonSchema = z.object({
   id: Int,
   name: String,
   description: String,

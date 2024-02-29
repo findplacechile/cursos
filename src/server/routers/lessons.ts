@@ -4,16 +4,16 @@ import { prisma } from "@/lib/prisma";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const clasesRouter = router({
+export const lessonsRouter = router({
   // create: adminProcedure
   //   .input(
-  //     ClasesSchema.omit({
+  //     LessonsSchema.omit({
   //       id: true,
   //     })
   //   )
   //   .mutation(async (opts) => {
   //     try {
-  //       const courseFound = await prisma.clases.findFirst({
+  //       const courseFound = await prisma.lessons.findFirst({
   //         where: {
   //           name: opts.input.name,
   //         },
@@ -22,7 +22,7 @@ export const clasesRouter = router({
   //       if (courseFound) {
   //         ThrowError(Error, "CONFLICT", "El curso ya existe");
   //       }
-  //       return await prisma.clases.create({
+  //       return await prisma.lessons.create({
   //         data: opts.input,
   //       });
   //     } catch (error) {
@@ -31,7 +31,7 @@ export const clasesRouter = router({
   //   }),
   readAll: publicProcedure.query(async () => {
     try {
-      return await prisma.clase.findMany();
+      return await prisma.lesson.findMany();
     } catch (error) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
@@ -47,7 +47,7 @@ export const clasesRouter = router({
     )
     .query(async (opts) => {
       try {
-        return await prisma.clase.findUnique({
+        return await prisma.lesson.findUnique({
           where: {
             id: opts.input.id,
           },
@@ -55,7 +55,7 @@ export const clasesRouter = router({
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "Error al obtener la clase",
+          message: "Error al obtener la lesson",
         });
       }
     }),

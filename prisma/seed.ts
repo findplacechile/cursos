@@ -88,12 +88,12 @@ const modulesData = [
   },
 ];
 
-// Clase
-const clasesData = [
+// Lesson
+const lessonsData = [
   {
     name: "Cómo registrar un dominio",
     url: "https://player.vimeo.com/video/454271149?h=b46bc61641",
-    description: "Descripción de la clase",
+    description: "Descripción de la lesson",
   },
 ];
 
@@ -141,11 +141,11 @@ const coursesModulesData = [
   },
 ];
 
-// ModuleClase
-const modulesClasesData = [
+// ModuleLesson
+const modulesLessonsData = [
   {
     moduleId: 2,
-    claseId: 1,
+    lessonId: 1,
   },
 ];
 
@@ -210,10 +210,10 @@ async function main() {
   await prisma.module.createMany({ data: modulesData });
   await prisma.$executeRaw`ALTER SEQUENCE "modules_id_seq" RESTART WITH 1`;
 
-  // Crear las clases
-  await prisma.clase.deleteMany();
-  await prisma.clase.createMany({ data: clasesData });
-  await prisma.$executeRaw`ALTER SEQUENCE "clases_id_seq" RESTART WITH 1`;
+  // Crear las lessons
+  await prisma.lesson.deleteMany();
+  await prisma.lesson.createMany({ data: lessonsData });
+  await prisma.$executeRaw`ALTER SEQUENCE "lessons_id_seq" RESTART WITH 1`;
 
   // Crear los objetivos
   await prisma.objective.deleteMany();
@@ -225,10 +225,10 @@ async function main() {
   await prisma.coursesModules.createMany({ data: coursesModulesData });
   //await prisma.$executeRaw`ALTER SEQUENCE "coursesModules_id_seq" RESTART WITH 1`;
 
-  // Crear las relaciones entre módulos y clases
-  await prisma.modulesClases.deleteMany();
-  await prisma.modulesClases.createMany({ data: modulesClasesData });
-  //await prisma.$executeRaw`ALTER SEQUENCE "modulesClases_id_seq" RESTART WITH 1`;
+  // Crear las relaciones entre módulos y lessons
+  await prisma.modulesLessons.deleteMany();
+  await prisma.modulesLessons.createMany({ data: modulesLessonsData });
+  //await prisma.$executeRaw`ALTER SEQUENCE "modulesLessons_id_seq" RESTART WITH 1`;
 
   // Crear las relaciones entre cursos y objetivos
   await prisma.coursesObjectives.deleteMany();
